@@ -3,6 +3,7 @@ import type { Question } from '../../types'
 import ReactBasics from './ReactBasics'
 import ReactSenior from './ReactSenior'
 import VirtualDOM from './VirtualDOM'
+import VirtualDOMResources from './VirtualDOMResources'
 
 export const reactQuestions: Question[] = [
   {
@@ -40,5 +41,6 @@ export const reactQuestions: Question[] = [
     file: 'src/items/react/questions/VirtualDOM.tsx',
     topics: ['Fiber', 'Virtual DOM', 'reconciliation', 'Concurrent Rendering'],
     Component: VirtualDOM,
+    Resources: VirtualDOMResources,
   },
 ]

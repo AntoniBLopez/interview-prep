@@ -28,4 +28,5 @@ export type Question = {
   file: string
   topics: string[]
   Component: ComponentType
+  Resources?: ComponentType
 }

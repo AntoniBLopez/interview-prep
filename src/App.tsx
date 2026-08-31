@@ -69,6 +69,7 @@ function App() {
   }
 
   const { Component } = activeItem
+  const Resources = activeItem.kind === 'question' ? activeItem.Resources : undefined
 
   return (
     <div className="flex min-h-screen flex-col bg-gray-50 dark:bg-gray-950">
@@ -139,17 +140,30 @@ function App() {
           </footer>
         </aside>
 
-        <main className="min-w-0 w-full max-w-6xl p-8">
-          {activeItem.kind === 'question' ? (
-            <QuestionLayout question={activeItem}>
-              <Component />
-            </QuestionLayout>
-          ) : (
-            <ExerciseLayout exercise={activeItem}>
-              <Component />
-            </ExerciseLayout>
-          )}
-        </main>
+        <div className="flex min-w-0">
+          <main className="min-w-0 w-full max-w-6xl shrink-0 p-8">
+            {activeItem.kind === 'question' ? (
+              <QuestionLayout question={activeItem}>
+                <Component />
+              </QuestionLayout>
+            ) : (
+              <ExerciseLayout exercise={activeItem}>
+                <Component />
+              </ExerciseLayout>
+            )}
+            {Resources ? (
+              <div className="mt-8 rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900 min-[1720px]:hidden">
+                <Resources />
+              </div>
+            ) : null}
+          </main>
+
+          {Resources ? (
+            <aside className="sticky top-0 hidden max-h-screen shrink-0 overflow-y-auto border-l border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900 min-[1720px]:block min-[1720px]:w-[clamp(18rem,calc(100vw-19.75rem-72rem),36rem)]">
+              <Resources />
+            </aside>
+          ) : null}
+        </div>
       </div>
     </div>
   )
