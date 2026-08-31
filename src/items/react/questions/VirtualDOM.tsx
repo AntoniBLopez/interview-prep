@@ -53,6 +53,128 @@ function Table({ headers, rows }: { headers: string[]; rows: string[][] }) {
   )
 }
 
+type Resource = {
+  rank: number
+  title: string
+  author: string
+  why: string
+  href: string
+}
+
+const fiberArticles: Resource[] = [
+  {
+    rank: 1,
+    title: 'Inside Fiber: in-depth overview of the new reconciliation algorithm in React',
+    author: 'Max Koretskyi (React In Depth)',
+    why: 'El deep-dive clásico. Sigue siendo el artículo más referenciado sobre Fiber. Extremadamente detallado y preciso.',
+    href: 'https://medium.com/react-in-depth/inside-fiber-in-depth-overview-of-the-new-reconciliation-algorithm-in-react-e1c04700ef6e',
+  },
+  {
+    rank: 2,
+    title: 'React Fiber Architecture',
+    author: 'Andrew Clark (React team)',
+    why: 'Las notas originales de un miembro del core team de React. El documento fundacional al que todo el mundo hace referencia.',
+    href: 'https://github.com/acdlite/react-fiber-architecture',
+  },
+  {
+    rank: 3,
+    title: 'A deep dive into React Fiber',
+    author: 'Karthik Kalyanaraman (LogRocket)',
+    why: 'Uno de los mejores deep dives modernos y actualizados (cubre conceptos hasta React 18/19).',
+    href: 'https://blog.logrocket.com/deep-dive-react-fiber/',
+  },
+  {
+    rank: 4,
+    title: 'The Internals of React: Understanding DOM Reconciliation and the React Fiber Architecture',
+    author: 'Fabrice Monnier',
+    why: 'Excelente explicación reciente y clara de cómo Fiber habilita el concurrent rendering.',
+    href: 'https://fabricemonnier.substack.com/p/the-internals-of-react-understanding',
+  },
+  {
+    rank: 5,
+    title: 'Overreacted — escritos de Dan Abramov',
+    author: 'Dan Abramov',
+    why: 'Aunque no es un único artículo largo sobre Fiber, sus explicaciones (especialmente sobre concurrent mode) son esenciales.',
+    href: 'https://overreacted.io/',
+  },
+]
+
+const fiberVideos: Resource[] = [
+  {
+    rank: 1,
+    title: 'A Cartoon Intro to Fiber (React Conf 2017)',
+    author: 'Lin Clark',
+    why: 'La introducción más famosa y accesible. Explicación estilo cartoon que hizo Fiber comprensible para miles de desarrolladores.',
+    href: 'https://www.youtube.com/watch?v=ZCuYPiUIONs',
+  },
+  {
+    rank: 2,
+    title: 'Beyond React 16 (JSConf Iceland 2018)',
+    author: 'Dan Abramov',
+    why: 'Charla legendaria. Muestra el problema que Fiber resuelve con demos en vivo de time-slicing y Suspense.',
+    href: 'https://www.youtube.com/watch?v=v6iR3Zk4oDY',
+  },
+  {
+    rank: 3,
+    title: 'What Is React Fiber? React.js Deep Dive #2',
+    author: 'Philip Fabianek',
+    why: 'Visión general clara, estructurada y bien explicada de los nodos Fiber, las fases y los árboles.',
+    href: 'https://www.youtube.com/watch?v=0ympFIwQFJw',
+  },
+  {
+    rank: 4,
+    title: 'React Fiber Is Confusing.. So I Made It Simple',
+    author: 'Sofia Goyal',
+    why: 'Explicación visual moderna con buenos diagramas de Current Tree vs Work In Progress Tree.',
+    href: 'https://www.youtube.com/watch?v=6JOm5rGvogc',
+  },
+  {
+    rank: 5,
+    title: 'React Fiber Reconciliation: How it Works (Part 1)',
+    author: 'Tejas Kumar',
+    why: 'Excelente explicación técnica del reconciler Stack vs Fiber.',
+    href: 'https://www.youtube.com/watch?v=rKk4XJYzSQA',
+  },
+  {
+    rank: 6,
+    title: 'Inside Fiber (React Summit 2022)',
+    author: 'Matheus Albuquerque',
+    why: 'Muy buena charla que profundiza en la estructura del FiberNode.',
+    href: 'https://www.youtube.com/watch?v=NLF0N9SACD4',
+  },
+]
+
+function ResourceList({ items }: { items: Resource[] }) {
+  return (
+    <ol className="list-none space-y-4 pl-0">
+      {items.map((item) => (
+        <li
+          key={item.rank}
+          className="rounded-md border border-gray-200 bg-gray-50 px-3 py-2.5 dark:border-gray-700 dark:bg-gray-800/50"
+        >
+          <p className="font-medium text-gray-900 dark:text-gray-100">
+            <span className="text-gray-500 dark:text-gray-400">{item.rank}. </span>
+            <a
+              href={item.href}
+              target="_blank"
+              rel="noreferrer"
+              className="text-blue-600 underline decoration-blue-200 underline-offset-2 hover:text-blue-800 dark:text-blue-400 dark:decoration-blue-800 dark:hover:text-blue-300"
+            >
+              {item.title}
+            </a>
+          </p>
+          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+            <strong className="font-medium text-gray-700 dark:text-gray-300">Autor:</strong> {item.author}
+          </p>
+          <p className="mt-1 text-sm text-gray-700 dark:text-gray-300">
+            <strong className="font-medium">Por qué es importante:</strong> {item.why}
+          </p>
+        </li>
+      ))}
+    </ol>
+  )
+}
+
 function VirtualDOM() {
   return (
     <div className="flex flex-col gap-2">
@@ -341,6 +463,19 @@ function handleSearch(text) {
             interfaz mientras calcula actualizaciones, gracias a Fiber. El “Concurrent Mode” era la forma antigua (y
             global) de activarlo.
           </p>
+        </Prose>
+      </CollapsibleSection>
+
+      <CollapsibleSection title="Recursos recomendados: artículos y vídeos" level={Level.Advanced}>
+        <Prose>
+          <p>
+            Lecturas y charlas de referencia para profundizar en Fiber, el Virtual DOM y la reconciliación. Ordenadas
+            por relevancia y utilidad para entrevistas.
+          </p>
+          <Heading>Artículos</Heading>
+          <ResourceList items={fiberArticles} />
+          <Heading>Vídeos</Heading>
+          <ResourceList items={fiberVideos} />
         </Prose>
       </CollapsibleSection>
 
