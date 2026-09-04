@@ -1,5 +1,9 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 
+// Cambia a `true` para grabar con useLayoutEffect (sin parpadeo).
+const USE_LAYOUT_EFFECT = false
+const usePositionEffect = USE_LAYOUT_EFFECT ? useLayoutEffect : useEffect
+
 export default function EffectVsLayoutEffect() {
   const tooltipRef = useRef<HTMLDivElement>(null)
   const [target, setTarget] = useState<{ x: number; y: number } | null>(null)
@@ -8,18 +12,12 @@ export default function EffectVsLayoutEffect() {
   const x = target?.x ?? 0
 
   // Con useEffect → el usuario puede ver el tooltip en la posición incorrecta un instante
-  useEffect(() => {
+  // Con useLayoutEffect → el ajuste ocurre antes de pintar → no se ve el salto
+  usePositionEffect(() => {
     if (!tooltipRef.current) return
     const { width } = tooltipRef.current.getBoundingClientRect()
     setPosition(x - width / 2)
   }, [x])
-
-  // Con useLayoutEffect → el ajuste ocurre antes de pintar → no se ve el salto
-  // useLayoutEffect(() => {
-  //   if (!tooltipRef.current) return
-  //   const { width } = tooltipRef.current.getBoundingClientRect()
-  //   setPosition(x - width / 2)
-  // }, [x])
 
   return (
     <div
