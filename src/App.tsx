@@ -141,11 +141,17 @@ function App() {
         </aside>
 
         <div className="flex min-w-0">
-          <main className="min-w-0 w-full max-w-6xl shrink-0 p-8">
+          <main
+            className={`min-w-0 w-full shrink-0${
+              activeItem.kind === 'exercise' && activeItem.blankLayout ? '' : ' max-w-6xl p-8'
+            }`}
+          >
             {activeItem.kind === 'question' ? (
               <QuestionLayout question={activeItem}>
                 <Component />
               </QuestionLayout>
+            ) : activeItem.blankLayout ? (
+              <Component />
             ) : (
               <ExerciseLayout exercise={activeItem}>
                 <Component />

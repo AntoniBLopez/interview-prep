@@ -16,6 +16,7 @@ export type Exercise = {
   file: string
   topics: string[]
   Component: ComponentType
+  blankLayout?: boolean
 }
 
 export type Question = {

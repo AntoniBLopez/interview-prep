@@ -436,19 +436,83 @@ test('increments counter', async () => {
       <CollapsibleSection title="What is the difference between useEffect and useLayoutEffect?" level={Level.Inrtermediate}>
         <Prose>
           <p>
-            Both run after React updates the DOM, but at different times.{' '}
-            <code className="inline-code">useEffect</code> runs <strong>after the browser paints</strong>,
-            so it does not block the UI. <code className="inline-code">useLayoutEffect</code> runs{' '}
-            <strong>before paint</strong>, synchronously — useful when you must measure or adjust the DOM before the user
-            sees the result.
+            Ambos se ejecutan <strong>después</strong> de que React haya actualizado el DOM (fase de commit), pero en
+            momentos distintos y con consecuencias diferentes.
           </p>
+
+          <Heading>1. useEffect (el normal)</Heading>
+          <Code>{`useEffect(() => {
+  // código
+}, [deps]);`}</Code>
+          <ul className="list-disc space-y-1 pl-5">
+            <li>Se ejecuta <strong>después</strong> de que el navegador haya pintado la pantalla (después del paint).</li>
+            <li>Es <strong>asíncrono</strong>.</li>
+            <li>No bloquea la pintura visual.</li>
+            <li>
+              Ideal para: llamadas a APIs, suscripciones, <code className="inline-code">console.log</code>, o cualquier
+              cosa que no necesite medirse o modificarse <strong>antes</strong> de que el usuario vea el resultado.
+            </li>
+          </ul>
+          <p><strong>Flujo:</strong></p>
+          <Code>{`Render → Diff → Commit (actualiza DOM) → Browser pinta → useEffect se ejecuta`}</Code>
+
+          <Heading>2. useLayoutEffect</Heading>
+          <Code>{`useLayoutEffect(() => {
+  // código
+}, [deps]);`}</Code>
+          <ul className="list-disc space-y-1 pl-5">
+            <li>
+              Se ejecuta <strong>síncronamente</strong> justo después de que React actualiza el DOM, pero{' '}
+              <strong>antes</strong> de que el navegador pinte.
+            </li>
+            <li>Bloquea la pintura hasta que termina.</li>
+            <li>
+              Ideal para: medir el DOM (<code className="inline-code">getBoundingClientRect</code>,{' '}
+              <code className="inline-code">offsetWidth</code>, etc.), hacer cambios visuales que deben ser invisibles al
+              usuario (evitar “parpadeos”), o sincronizar el DOM con el estado de forma inmediata.
+            </li>
+          </ul>
+          <p><strong>Flujo:</strong></p>
+          <Code>{`Render → Diff → Commit (actualiza DOM) → useLayoutEffect se ejecuta → Browser pinta`}</Code>
+
+          <Heading>Comparación rápida</Heading>
           <Table
-            headers={['Hook', 'When', 'Blocks paint?']}
+            headers={['Aspecto', 'useEffect', 'useLayoutEffect']}
             rows={[
-              ['useEffect', 'After paint (async)', 'No'],
-              ['useLayoutEffect', 'After DOM update, before paint', 'Yes'],
+              ['Momento de ejecución', 'Después del paint', 'Antes del paint'],
+              ['Bloquea la pintura', 'No', 'Sí'],
+              ['Rendimiento', 'Más ligero', 'Puede causar jank si es pesado'],
+              ['Uso típico', 'Side effects generales', 'Mediciones / ajustes visuales'],
+              ['Riesgo de parpadeo visual', 'Posible', 'Muy bajo'],
             ]}
           />
+
+          <Heading>Ejemplo práctico de por qué importa</Heading>
+          <p>Imagina que quieres centrar un tooltip basándote en su tamaño real:</p>
+          <Code>{`// Con useEffect → el usuario puede ver el tooltip en la posición incorrecta un instante
+useEffect(() => {
+  const { width } = tooltipRef.current.getBoundingClientRect();
+  setPosition(x - width / 2);
+}, []);
+
+// Con useLayoutEffect → el ajuste ocurre antes de pintar → no se ve el salto
+useLayoutEffect(() => {
+  const { width } = tooltipRef.current.getBoundingClientRect();
+  setPosition(x - width / 2);
+}, []);`}</Code>
+
+          <Heading>Regla práctica</Heading>
+          <ul className="list-disc space-y-1 pl-5">
+            <li>
+              Usa <code className="inline-code">useEffect</code> por defecto (el 95 % de los casos).
+            </li>
+            <li>
+              Usa <code className="inline-code">useLayoutEffect</code> solo cuando necesites leer o modificar el DOM{' '}
+              <strong>antes</strong> de que el usuario lo vea.
+            </li>
+          </ul>
+
+          <DocLink href="https://react.dev/reference/react/useEffect" label="React docs — useEffect" />
           <DocLink href="https://react.dev/reference/react/useLayoutEffect" label="React docs — useLayoutEffect" />
         </Prose>
       </CollapsibleSection>

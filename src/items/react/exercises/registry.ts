@@ -7,6 +7,7 @@ import { CodeSplitting } from './code-splitting/CodeSplitting'
 import { GlobalStore } from './global-store/GlobalStore'
 import TreeBrowser from './tree-browser/TreeBrowser'
 import AIInference from './ai-inference/AIInference'
+import EffectVsLayoutEffect from './effect-vs-layout/EffectVsLayoutEffect'
 
 export const reactExercises: Exercise[] = [
   {
@@ -89,5 +90,18 @@ export const reactExercises: Exercise[] = [
     file: 'src/items/react/exercises/ai-inference/AIInference.tsx',
     topics: ['JSON', 'Render', 'Recursive', 'State'],
     Component: AIInference,
+  },
+  {
+    kind: 'exercise',
+    id: 'effect-vs-layout',
+    level: Level.Inrtermediate,
+    question: 'Demo en vídeo: useEffect vs useLayoutEffect',
+    title: 'Effect vs LayoutEffect (vídeo)',
+    description:
+      'Pantalla en blanco. Haz clic para colocar el tooltip. Alterna el hook comentado en el código para grabar la diferencia.',
+    file: 'src/items/react/exercises/effect-vs-layout/EffectVsLayoutEffect.tsx',
+    topics: ['useEffect', 'useLayoutEffect'],
+    Component: EffectVsLayoutEffect,
+    blankLayout: true,
   },
 ]
